@@ -10,8 +10,8 @@ uint8_t failSafe;
 uint16_t lostFrames = 0;
 uint16_t direction = 10;
 
-unsigned long previousMillis = 0;        // will store last time S.BUS was updated
-const long INTERVAL = 7;           // interval at which to update S.BUS (milliseconds)
+unsigned long previousMillis = 0;  // will store last time S.BUS was updated
+const long INTERVAL = 7;           // interval at which to update S.BUS (milliseconds), alternative value: 14ms
 const uint16_t SBUS_VALUE_MIN = 0x0; // min value
 const uint16_t SBUS_VALUE_MAX = 0x7FF; // max value / 11 Bit per channel
 
@@ -27,7 +27,7 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= INTERVAL) {
-    // save the last time you blinked the LED
+    // save the last time you updated S.BUS
     previousMillis = currentMillis;
 
     channels[0]+=direction;
@@ -35,7 +35,7 @@ void loop() {
       direction*=-1;  
     }
     
-    // write the SBUS packet to an SBUS compatible servo
+    // write the SBUS packet to SBUS compatible servos
     sbusOut.write(&channels[0]);
   }
 }
